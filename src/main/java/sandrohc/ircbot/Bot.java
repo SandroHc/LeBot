@@ -19,7 +19,6 @@ public class Bot extends PircBot {
 		this.setName("Victorique-chan");
 		this.setAutoNickChange(true);
 		this.connect("irc.esper.net"); // Connect to the IRC server
-		this.identify("biscoitos123");
 
 		// Join the channels specified
 		for(String channel : channels)
@@ -58,9 +57,6 @@ public class Bot extends PircBot {
 				sendMessage("SandroHc", silentMode ? "Ok ok, goshujin-sama. :(" : "As you wish, ore no goshujin-sama!");
 			} else if(message.equals("quit")) {
 				sendMessage("SandroHc", "Sayounara goshujin-sama.");
-				for(String channel : getChannels())
-					sendMessage(channel, "Sayounara minna.");
-
 				this.disconnect();
 			}
 		}
@@ -71,31 +67,8 @@ public class Bot extends PircBot {
 		System.exit(0);
 	}
 
-
-
-
 	@Override
-	protected void onAction(String sender, String login, String hostname, String target, String action) {
-		super.onAction(sender, login, hostname, target, action);
-	}
-
-	@Override
-	protected void onNotice(String sourceNick, String sourceLogin, String sourceHostname, String target, String notice) {
-		super.onNotice(sourceNick, sourceLogin, sourceHostname, target, notice);
-	}
-
-	@Override
-	protected void onPart(String channel, String sender, String login, String hostname) {
-		super.onPart(channel, sender, login, hostname);
-	}
-
-	@Override
-	protected void onNickChange(String oldNick, String login, String hostname, String newNick) {
-		super.onNickChange(oldNick, login, hostname, newNick);
-	}
-
-	@Override
-	protected void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason) {
-		super.onQuit(sourceNick, sourceLogin, sourceHostname, reason);
+	protected void onConnect() {
+		this.identify("biscoitos123");
 	}
 }
