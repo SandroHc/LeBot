@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile 'org.apache.commons:commons-io:1.3.2'
+    compile 'com.google.code.gson:gson:2.2.4'
+	compile 'pircbot:pircbot:1.5.0'
+}
+
+group = 'sandrohc.ircbot'
+archivesBaseName = 'IRC CJBot'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+version =  '1.0'
+
+jar {
+    // JAR manifest configuration
+    manifest.mainAttributes(
+            "Built-By": System.properties['user.name'],
+            "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+            "Implementation-Title": archivesBaseName,
+            "Implementation-Version": version,
+            "Main-Class": group + '.Main')
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
+    options.deprecation = true
+    options.encoding = "UTF-8"
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
