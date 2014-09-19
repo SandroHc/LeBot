@@ -58,7 +58,6 @@ public class CommandHandler {
 	}
 
 	public void register(Command command) {
-		LogHandler.debug("Registering command: " + command.toString());
 		listeners.add(command);
 	}
 
