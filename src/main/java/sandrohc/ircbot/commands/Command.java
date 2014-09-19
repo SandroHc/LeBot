@@ -1,11 +1,35 @@
 package sandrohc.ircbot.commands;
 
+import sandrohc.ircbot.commands.events.Event;
+import sandrohc.ircbot.commands.events.EventCommand;
+import sandrohc.ircbot.handlers.CommandHandler;
+import sandrohc.ircbot.handlers.CommandHandler.EVENT_TYPE;
+import sandrohc.ircbot.handlers.LogHandler;
+
+import java.util.Arrays;
+
 public abstract class Command {
 	private String name;
 	private String description = "";
 	private String[] aliases = {};
 
-	public abstract void parse(String channel, String sender, String message);
+	protected Command() {
+		CommandHandler.INSTANCE.register(this);
+	}
+
+	public abstract void handleEvent(Event e);
+	public abstract void run(Event e);
+
+	/**
+	 * Check is the string belongs to the command on this event.
+	 * It consists on check is any of the name or aliases is equal to the string.
+	 *
+	 * @param e The event to get the command
+	 * @return true if the any of the name of alieases equals the string; false otherwise.
+	 */
+	public boolean isEqual(Event e) {
+		return e instanceof EventCommand && isEqual(((EventCommand) e).getCommand());
+	}
 
 	/**
 	 * Check is the string belongs to this command.
@@ -44,5 +68,20 @@ public abstract class Command {
 
 	public void setAliases(String[] aliases) {
 		this.aliases = aliases;
+	}
+
+	public abstract EVENT_TYPE getType();
+
+	protected void log(Object o) {
+		LogHandler.info(getName() + ": " + o.toString());
+	}
+
+	@Override
+	public String toString() {
+		return "Command{" +
+				"name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", aliases=" + Arrays.toString(aliases) +
+				'}';
 	}
 }

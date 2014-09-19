@@ -3,6 +3,7 @@ package sandrohc.ircbot;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.PircBot;
 import sandrohc.ircbot.handlers.CommandHandler;
+import sandrohc.ircbot.handlers.LogHandler;
 
 import java.io.IOException;
 
@@ -10,11 +11,13 @@ public class Bot extends PircBot {
 	public static Bot INSTANCE;
 	private static String[] channels = { "#cjb" };
 
-	private boolean silentMode = false;
+	private boolean stopProcessingMessages = false;
 
 	public Bot() throws IrcException, IOException {
 		INSTANCE = this;
-		this.setVerbose(true); // Enable debugging output
+		this.setVerbose(false); // Enable debugging output
+
+		LogHandler.info("Iniciando bot...");
 
 		this.setName("Victorique-chan");
 		this.setAutoNickChange(true);
@@ -27,10 +30,8 @@ public class Bot extends PircBot {
 
 	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message) {
-		CommandHandler.INSTANCE.parse(channel, sender, message);
-
-		if(!silentMode && message.equals("( ͡° ͜ʖ ͡°)"))
-			sendMessage(channel, "( ͡° ͜ʖ ͡°)");
+		if(!stopProcessingMessages)
+			CommandHandler.INSTANCE.parse(channel, sender, message);
 	}
 
 	@Override
@@ -41,20 +42,19 @@ public class Bot extends PircBot {
 
 	@Override
 	protected void onJoin(String channel, String sender, String login, String hostname) {
-		if(sender.equals(getNick())) return;
-
 		if(sender.equals("SandroHc"))
 			sendMessage(channel, "Ohayo goshujin-sama!");
 	}
 
 	@Override
 	protected void onPrivateMessage(String sender, String login, String hostname, String message) {
-		CommandHandler.INSTANCE.parse(sender, sender, message);
+		if(!stopProcessingMessages)
+			CommandHandler.INSTANCE.parse(sender, sender, message);
 
 		if(sender.equals("SandroHc")) {
 			if(message.equals("stop")) {
-				silentMode = !silentMode;
-				sendMessage("SandroHc", silentMode ? "Ok ok, goshujin-sama. :(" : "As you wish, ore no goshujin-sama!");
+				stopProcessingMessages = !stopProcessingMessages;
+				sendMessage("SandroHc", stopProcessingMessages ? "Ok ok, goshujin-sama. :(" : "As you wish, watashi no goshujin-sama!");
 			} else if(message.equals("quit")) {
 				sendMessage("SandroHc", "Sayounara goshujin-sama.");
 				this.disconnect();
@@ -69,6 +69,7 @@ public class Bot extends PircBot {
 
 	@Override
 	protected void onConnect() {
+		LogHandler.info("Conectado ao servidor.");
 		this.identify("biscoitos123");
 	}
 }

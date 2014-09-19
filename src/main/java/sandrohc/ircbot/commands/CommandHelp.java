@@ -1,7 +1,9 @@
 package sandrohc.ircbot.commands;
 
 import sandrohc.ircbot.Bot;
+import sandrohc.ircbot.commands.events.Event;
 import sandrohc.ircbot.handlers.CommandHandler;
+import sandrohc.ircbot.handlers.CommandHandler.EVENT_TYPE;
 
 import java.util.Arrays;
 
@@ -13,13 +15,19 @@ public class CommandHelp extends Command {
 	}
 
 	@Override
-	public void parse(String channel, String sender, String message) {
-		if("".equals(message)) { // No arguments, show the whole command list
+	public void handleEvent(Event e) {
+		if(getType().equals(e.getType()) && isEqual(e))
+			run(e);
+	}
+
+	@Override
+	public void run(Event e) {
+		if("".equals(e.getMessage())) { // No arguments, show the whole command list
 			StringBuilder sb = new StringBuilder();
 			sb.append("Comandos: ");
 
 			short index = 0;
-			for(Command command : CommandHandler.INSTANCE.getList()) {
+			for(Command command : CommandHandler.INSTANCE.getListeners()) {
 				if(index > 0) sb.append(", ");
 				sb.append(command.getName());
 
@@ -28,20 +36,25 @@ public class CommandHelp extends Command {
 
 				index++;
 			}
-			Bot.INSTANCE.sendMessage(channel, sb.toString());
+			Bot.INSTANCE.sendMessage(e.getChannel(), sb.toString());
 		} else { // Arguments, show the help for the command
-			Command command = CommandHandler.INSTANCE.get(message);
+			Command command = CommandHandler.INSTANCE.get(e.getMessage());
 			if(command != null) { // Command exists, show description
 				String description = command.getDescription();
 				if("".equals(description))
-					Bot.INSTANCE.sendMessage(channel, "Não existe descrição disponível para '" + message + "'.");
+					Bot.INSTANCE.sendMessage(e.getChannel(), "Não existe descrição disponível para '" + e.getMessage() + "'.");
 				else {
 					String aliases = command.getAliases().length > 0 ? " " + Arrays.toString(command.getAliases()) : "";
-					Bot.INSTANCE.sendMessage(channel, command.getName() + aliases + ": " + description);
+					Bot.INSTANCE.sendMessage(e.getChannel(), command.getName() + aliases + ": " + description);
 				}
 			} else {
-				Bot.INSTANCE.sendMessage(channel, "O comando '" + message + "' não existe. para uma lista dos comandos, escreve /help");
+				Bot.INSTANCE.sendMessage(e.getChannel(), "O comando '" + e.getMessage() + "' não existe. para uma lista dos comandos, escreve /help");
 			}
 		}
+	}
+
+	@Override
+	public EVENT_TYPE getType() {
+		return EVENT_TYPE.COMMAND;
 	}
 }
