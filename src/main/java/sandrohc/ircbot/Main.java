@@ -1,6 +1,8 @@
 package sandrohc.ircbot;
 
 import sandrohc.ircbot.commands.CommandAdvanced;
+import sandrohc.ircbot.commands.CommandConverter;
+import sandrohc.ircbot.commands.CommandGoogle;
 import sandrohc.ircbot.commands.CommandHelp;
 import sandrohc.ircbot.commands.CommandOsu;
 import sandrohc.ircbot.handlers.CommandHandler;
@@ -17,6 +19,8 @@ public class Main {
 			// Load the commands
 			new CommandHelp();
 			new CommandAdvanced();
+			new CommandGoogle();
+			new CommandConverter();
 			new CommandOsu();
 		} catch(Exception e) {
 			e.printStackTrace();

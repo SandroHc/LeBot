@@ -1,11 +1,9 @@
 package sandrohc.ircbot.commands;
 
-import sandrohc.ircbot.commands.events.Event;
-import sandrohc.ircbot.commands.events.EventCommand;
 import sandrohc.ircbot.handlers.CommandHandler;
-import sandrohc.ircbot.handlers.CommandHandler.EVENT_TYPE;
 import sandrohc.ircbot.handlers.LogHandler;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public abstract class Command {
@@ -17,18 +15,14 @@ public abstract class Command {
 		CommandHandler.INSTANCE.register(this);
 	}
 
-	public abstract void handleEvent(Event e);
-	public abstract void run(Event e);
-
-	/**
-	 * Check is the string belongs to the command on this event.
-	 * It consists on check is any of the name or aliases is equal to the string.
-	 *
-	 * @param e The event to get the command
-	 * @return true if the any of the name of alieases equals the string; false otherwise.
-	 */
-	public boolean isEqual(Event e) {
-		return e instanceof EventCommand && isEqual(((EventCommand) e).getCommand());
+	public boolean handleEvent(Event e) throws IOException {
+		if(hasSuffix()) {
+			if(getSuffix().equals(String.valueOf(e.getMessage().charAt(0))))
+				e.setMessage(e.getMessage().substring(1));
+			else
+				return false;
+		}
+		return true;
 	}
 
 	/**
@@ -40,9 +34,7 @@ public abstract class Command {
 	 */
 	public boolean isEqual(String name) {
 		if(this.getName().equals(name)) return true;
-		for(String alias : aliases)
-			if(alias.equals(name)) return true;
-
+		for(String alias : aliases) if(alias.equals(name)) return true;
 		return false;
 	}
 
@@ -70,7 +62,15 @@ public abstract class Command {
 		this.aliases = aliases;
 	}
 
-	public abstract EVENT_TYPE getType();
+	public abstract boolean hasSuffix();
+
+	/**
+	 * Return the suffix needed to proceed in this comand.
+	 * Default suffix is '!'.
+	 *
+	 * @return The specific suffix for this command
+	 */
+	public String getSuffix() { return "!"; }
 
 	protected void log(Object o) {
 		LogHandler.info(getName() + ": " + o.toString());
@@ -82,6 +82,8 @@ public abstract class Command {
 				"name='" + name + '\'' +
 				", description='" + description + '\'' +
 				", aliases=" + Arrays.toString(aliases) +
-				'}';
+				", hasSuffix=" + hasSuffix() +
+				(hasSuffix() ? ", getSuffix='" + getSuffix() + "'" : "") +
+				"}";
 	}
 }

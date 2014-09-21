@@ -32,8 +32,6 @@ public class URLHandler {
 	public static String getContents(URL url) {
 		if(url == null) throw new NullPointerException("url can not be null!");
 
-		System.out.println(url.toString());
-
 		try {
 			URLConnection con = url.openConnection();
 			InputStream in = con.getInputStream();

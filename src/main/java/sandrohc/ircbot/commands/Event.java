@@ -1,13 +1,9 @@
-package sandrohc.ircbot.commands.events;
+package sandrohc.ircbot.commands;
 
-import sandrohc.ircbot.handlers.CommandHandler.EVENT_TYPE;
-
-public abstract class Event {
+public class Event {
 	protected String channel = "";
 	protected String sender = "";
 	protected String message = "";
-
-	public abstract EVENT_TYPE getType();
 
 	public String getMessage() {
 		return message;

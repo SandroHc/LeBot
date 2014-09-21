@@ -19,7 +19,26 @@ public class OsuUser {
 	public int count100;
 	public int count50;
 	public String country;
-	public OsuUserEvents[] events;
+	public Event[] events;
+
+	static class Event {
+		public String display_html;
+		public int beatmap_id;
+		public int beatmapset_id;
+		public String date;
+		public int epicfactor;
+
+		@Override
+		public String toString() {
+			return "Event[" +
+					"display_html='" + display_html + '\'' +
+					", beatmap_id='" + beatmap_id + '\'' +
+					", beatmapset_id='" + beatmapset_id + '\'' +
+					", date='" + date + '\'' +
+					", epicfactor='" + epicfactor + '\'' +
+					']';
+		}
+	}
 
 	@Override
 	public String toString() {
