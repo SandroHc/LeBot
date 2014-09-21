@@ -3,31 +3,34 @@ package sandrohc.ircbot.commands;
 import com.google.gson.Gson;
 import sandrohc.ircbot.Bot;
 import sandrohc.ircbot.commands.google.GoogleResults;
-import sandrohc.ircbot.handlers.URLHandler;
+import sandrohc.ircbot.utils.TextEffectUtil;
+import sandrohc.ircbot.utils.TextEffectUtil.COLOR;
+import sandrohc.ircbot.utils.TextEffectUtil.EFFECT;
+import sandrohc.ircbot.utils.URLUtil;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 public class CommandGoogle extends Command {
 
-	public CommandGoogle() {
+	@Override
+	protected void init() {
 		this.setName("google");
 		this.setDescription("Executa uma pesquisa Google rápida.");
 	}
 
 	@Override
-	public boolean handleEvent(Event e) throws IOException {
-		if(super.handleEvent(e)) {
-			String content = URLHandler.getContents(URLHandler.generateURL("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=" + URLEncoder.encode(e.getMessage(), "UTF-8")));
+	protected void execute(Event e) {
+		try {
+			String content = URLUtil.getContents(URLUtil.generateURL("http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=" + URLEncoder.encode(e.getMessage(), "UTF-8")));
 			GoogleResults results = new Gson().fromJson(content, GoogleResults.class);
 
 			// Show title and URL of 1st result.
-			Bot.INSTANCE.sendMessage(e.getChannel(), URLDecoder.decode(results.getResponseData().getResults().get(0).getTitle() + " (\u0002" + results.getResponseData().getResults().get(0).getUrl() + "\u000F)", "UTF-8"));
-
-			return true;
+			Bot.INSTANCE.sendMessage(e.getChannel(), URLDecoder.decode(results.getResponseData().getResults().get(0).getTitle().replaceAll("<b>([^<]*)</b>", EFFECT.BOLD.getChar() + "$1" + EFFECT.PLAIN.getChar()) + ' ' + TextEffectUtil.applyColor(results.getResponseData().getResults().get(0).getUrl(), COLOR.BLUE, COLOR.WHITE), "UTF-8"));
+		} catch(UnsupportedEncodingException e1) {
+			e1.printStackTrace();
 		}
-		return false;
 	}
 
 	@Override

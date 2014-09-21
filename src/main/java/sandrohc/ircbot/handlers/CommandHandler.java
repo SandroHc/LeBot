@@ -3,7 +3,6 @@ package sandrohc.ircbot.handlers;
 import sandrohc.ircbot.commands.Command;
 import sandrohc.ircbot.commands.Event;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,10 +46,6 @@ public class CommandHandler {
 //		Event event = new Event().setChannel(channel).setSender(sender).setMessage(message);
 
 		for(Command command : listeners)
-			try {
-				command.handleEvent(new Event().setChannel(channel).setSender(sender).setMessage(message));
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+			command.handleEvent(new Event().setChannel(channel).setSender(sender).setMessage(message));
 	}
 }

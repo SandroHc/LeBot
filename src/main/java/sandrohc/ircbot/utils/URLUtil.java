@@ -1,4 +1,4 @@
-package sandrohc.ircbot.handlers;
+package sandrohc.ircbot.utils;
 
 import org.apache.commons.io.IOUtils;
 
@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class URLHandler {
+public class URLUtil {
 
 	/**
 	 * Create and handle any exceptions that may be thrown by URL.

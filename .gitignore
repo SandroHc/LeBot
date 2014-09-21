@@ -1,3 +1,4 @@
+.gradle/
 .idea/
 build/
 out/
@@ -7,3 +8,4 @@ out/
 *.iws
 
 Update.bat
+Build.bat

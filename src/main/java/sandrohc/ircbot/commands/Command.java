@@ -3,7 +3,6 @@ package sandrohc.ircbot.commands;
 import sandrohc.ircbot.handlers.CommandHandler;
 import sandrohc.ircbot.handlers.LogHandler;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public abstract class Command {
@@ -12,10 +11,18 @@ public abstract class Command {
 	private String[] aliases = {};
 
 	protected Command() {
+		init();
 		CommandHandler.INSTANCE.register(this);
 	}
 
-	public boolean handleEvent(Event e) throws IOException {
+	protected abstract void init();
+
+	public void handleEvent(Event e) {
+		if(validate(e))
+			execute(e);
+	}
+
+	protected boolean validate(Event e) {
 		if(hasSuffix()) {
 			if(getSuffix().equals(String.valueOf(e.getMessage().charAt(0))))
 				e.setMessage(e.getMessage().substring(1));
@@ -24,6 +31,8 @@ public abstract class Command {
 		}
 		return true;
 	}
+
+	protected abstract void execute(Event e);
 
 	/**
 	 * Check is the string belongs to this command.
