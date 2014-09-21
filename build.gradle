@@ -10,6 +10,7 @@ dependencies {
 	compile 'org.apache.commons:commons-io:1.3.2'
     compile 'com.google.code.gson:gson:2.2.4'
 	compile 'pircbot:pircbot:1.5.0'
+	compile 'com.fathzer:javaluator:3.0.0'
 }
 
 group = 'sandrohc.ircbot'
