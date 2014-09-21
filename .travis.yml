@@ -1,7 +1,10 @@
 language: java
-jdk: oraclejdk7
+jdk: oraclejdk8
 env:
 - TERM=dumb
+
+before_install:
+ - chmod +x gradlew
 
 script:
 - ./gradlew --info build
