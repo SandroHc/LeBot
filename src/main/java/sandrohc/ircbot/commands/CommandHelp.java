@@ -68,4 +68,19 @@ public class CommandHelp extends Command {
 	public boolean hasSuffix() {
 		return true;
 	}
+
+	@Override
+	public String getUse() {
+		return "!help <comando>";
+	}
+
+	@Override
+	public String getExampleUse() {
+		return "!help calc";
+	}
+
+	@Override
+	public boolean onlyOps() {
+		return false;
+	}
 }

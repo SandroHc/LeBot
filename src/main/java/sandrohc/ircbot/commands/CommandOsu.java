@@ -60,4 +60,19 @@ public class CommandOsu extends Command {
 	public boolean hasSuffix() {
 		return true;
 	}
+
+	@Override
+	public String getUse() {
+		return "!osu [utilizador]";
+	}
+
+	@Override
+	public String getExampleUse() {
+		return "!osu rrtyui";
+	}
+
+	@Override
+	public boolean onlyOps() {
+		return false;
+	}
 }

@@ -48,4 +48,19 @@ public class CommandAdvanced extends Command {
 	public boolean hasSuffix() {
 		return false;
 	}
+
+	@Override
+	public String getUse() {
+		return "";
+	}
+
+	@Override
+	public String getExampleUse() {
+		return "";
+	}
+
+	@Override
+	public boolean onlyOps() {
+		return true;
+	}
 }

@@ -42,4 +42,19 @@ public class CommandGoogle extends Command {
 	public String getSuffix() {
 		return "?";
 	}
+
+	@Override
+	public String getUse() {
+		return "?<pesquisa>";
+	}
+
+	@Override
+	public String getExampleUse() {
+		return "?google";
+	}
+
+	@Override
+	public boolean onlyOps() {
+		return false;
+	}
 }

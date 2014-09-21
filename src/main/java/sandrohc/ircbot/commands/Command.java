@@ -23,6 +23,8 @@ public abstract class Command {
 	}
 
 	protected boolean validate(Event e) {
+//		if(onlyOps() && isOp(e.getSender())) return false;
+
 		if(hasSuffix()) {
 			if(getSuffix().equals(String.valueOf(e.getMessage().charAt(0))))
 				e.setMessage(e.getMessage().substring(1));
@@ -80,6 +82,11 @@ public abstract class Command {
 	 * @return The specific suffix for this command
 	 */
 	public String getSuffix() { return "!"; }
+
+	public abstract String getUse();
+	public abstract String getExampleUse();
+
+	public abstract boolean onlyOps();
 
 	protected void log(Object o) {
 		LogHandler.info(getName() + ": " + o.toString());
