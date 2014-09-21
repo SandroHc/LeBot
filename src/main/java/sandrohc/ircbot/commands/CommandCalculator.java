@@ -22,8 +22,6 @@ public class CommandCalculator extends Command {
 	protected void execute(Event e)  {
 		try {
 			Double result = evaluator.evaluate(e.getMessage());
-
-//			ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
 			Bot.INSTANCE.sendMessage(e.getChannel(), TextEffectUtil.applyEffect(String.valueOf(result), EFFECT.BOLD));
 		} catch(IllegalArgumentException e1) {
 			Bot.INSTANCE.sendMessage(e.getChannel(), TextEffectUtil.applyColor(e1.getMessage(), COLOR.LIGHT_RED, COLOR.WHITE));

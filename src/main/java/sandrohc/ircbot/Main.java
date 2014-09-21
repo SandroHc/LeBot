@@ -1,6 +1,7 @@
 package sandrohc.ircbot;
 
 import sandrohc.ircbot.commands.CommandAdvanced;
+import sandrohc.ircbot.commands.CommandAutoResponses;
 import sandrohc.ircbot.commands.CommandCalculator;
 import sandrohc.ircbot.commands.CommandGoogle;
 import sandrohc.ircbot.commands.CommandHelp;
@@ -18,6 +19,7 @@ public class Main {
 
 			// Load the commands
 			new CommandHelp();
+			new CommandAutoResponses();
 			new CommandAdvanced();
 			new CommandGoogle();
 			new CommandCalculator();

@@ -1,5 +1,7 @@
 package sandrohc.ircbot.commands;
 
+import org.jibble.pircbot.User;
+import sandrohc.ircbot.Bot;
 import sandrohc.ircbot.handlers.CommandHandler;
 import sandrohc.ircbot.handlers.LogHandler;
 
@@ -23,15 +25,16 @@ public abstract class Command {
 	}
 
 	protected boolean validate(Event e) {
-//		if(onlyOps() && isOp(e.getSender())) return false;
-
 		if(hasSuffix()) {
-			if(getSuffix().equals(String.valueOf(e.getMessage().charAt(0))))
+			if(getSuffix().equals(String.valueOf(e.getMessage().charAt(0)))) {
+				if(onlyOps() && !isOp(e.getChannel(), e.getSender())) return false; // Check only for operator status when truly needed
+
 				e.setMessage(e.getMessage().substring(1));
+			}
 			else
 				return false;
 		}
-		return true;
+		return !(onlyOps() && !isOp(e.getChannel(), e.getSender())); // Check only for operator status when truly needed
 	}
 
 	protected abstract void execute(Event e);
@@ -88,18 +91,20 @@ public abstract class Command {
 
 	public abstract boolean onlyOps();
 
+	public boolean isOp(String channel, String nick) {
+		if(nick == null || nick.isEmpty()) return false;
+
+		for(User user : Bot.INSTANCE.getUsers(channel))
+			if(user.getNick().equals(nick)) return user.isOp();
+		return false;
+	}
+
 	protected void log(Object o) {
 		LogHandler.info(getName() + ": " + o.toString());
 	}
 
 	@Override
 	public String toString() {
-		return "Command{" +
-				"name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", aliases=" + Arrays.toString(aliases) +
-				", hasSuffix=" + hasSuffix() +
-				(hasSuffix() ? ", getSuffix='" + getSuffix() + "'" : "") +
-				"}";
+		return "Command{" + "name='" + name + '\'' + ", description='" + description + '\'' + ", aliases=" + Arrays.toString(aliases) + ", hasSuffix=" + hasSuffix() + (hasSuffix() ? ", getSuffix='" + getSuffix() + "'" : "") + "}";
 	}
 }

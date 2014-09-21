@@ -52,7 +52,9 @@ public class Bot extends PircBot {
 			CommandHandler.INSTANCE.parse(sender, sender, message);
 
 		if(sender.equals("SandroHc")) {
-			if(message.equals("stop")) {
+			if(message.startsWith("\"")) {
+				sendMessage("#CJB", message.substring(1));
+			} else if(message.equals("stop")) {
 				stopProcessingMessages = !stopProcessingMessages;
 				sendMessage("SandroHc", stopProcessingMessages ? "Ok ok, goshujin-sama. :(" : "As you wish, watashi no goshujin-sama!");
 			} else if(message.equals("quit")) {

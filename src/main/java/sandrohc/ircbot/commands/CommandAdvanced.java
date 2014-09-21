@@ -13,45 +13,38 @@ public class CommandAdvanced extends Command {
 	}
 
 	@Override
+	protected boolean validate(Event e) {
+		if(!super.validate(e)) return false;
+
+		if(e.getMessage().length() == 0) return false; // Stop any attempt to parse empty (no arguments) events
+
+		String commandName;
+		int index = e.getMessage().indexOf(' ');
+		if(index != -1) { // Check if we have any arguments for the specified command
+			commandName = e.getMessage().substring(0, index);    // Get the command name
+			e.setMessage(e.getMessage().substring(index + 1));    // Get the command arguments
+		} else {
+			commandName = e.getMessage().substring(0, e.getMessage().length());
+			e.setMessage(""); // Remove any garbage from here (try to execute with no arguments)
+		}
+
+		// Not this command, return
+		return isEqual(commandName);
+	}
+
+	@Override
 	protected void execute(Event e) {
-//		EventCommand evtCmd = (EventCommand) e;
-//		if(!CommandHandler.INSTANCE.contains(evtCmd.getCommand())) // Send a unknown command warning
-//			Bot.INSTANCE.sendMessage(evtCmd.getChannel(), "Comando '" + evtCmd.getCommand() + "' desconhecido. Usa " + getSuffix() + "help para uma lista dos comandos disponíveis.");
-
-		if((e.getMessage().contains("puta")) || e.getMessage().contains("cabrão")) {
-			Bot.INSTANCE.sendMessage(e.getChannel(), "korosu yo!");
-			return;
-		}
-
-		if(e.getMessage().contains("ohayo") || e.getMessage().contains("konnichiwa") || e.getMessage().contains("konbanwa") || e.getMessage().contains("olá")) {
-			if(responses[2] + 10000 < System.currentTimeMillis()) {
-				Bot.INSTANCE.sendMessage(e.getChannel(), "ohayo " + e.getSender() + "-kun!");
-				responses[2] = System.currentTimeMillis();
-			}
-		} else if(e.getMessage().contains("oyasumi")) {
-			if(responses[1] + 10000 < System.currentTimeMillis()) {
-				Bot.INSTANCE.sendMessage(e.getChannel(), "oyasumi! matta ashita " + e.getSender() + "-kun.");
-				responses[1] = System.currentTimeMillis();
-			}
-		} else if(e.getMessage().contains(Bot.INSTANCE.getName())) {
-			String msg = e.getSender().equals("SandroHc") ? "Sandro-kun, ore no daisuki no otoko, nani? ♥" : "nani " + e.getSender() + "-kun?";
-			Bot.INSTANCE.sendMessage(e.getChannel(), msg);
-		}
-
-		if(e.getMessage().contains("( ͡° ͜ʖ ͡°)") && responses[0] + 5000 < System.currentTimeMillis()) { // Prevent spam by making a minimum delay of 5 seconds
-			Bot.INSTANCE.sendMessage(e.getChannel(), "( ͡° ͜ʖ ͡°)");
-			responses[0] = System.currentTimeMillis();
-		}
+		Bot.INSTANCE.sendMessage(e.getChannel(), "Yep. És operador, parabéns!");
 	}
 
 	@Override
 	public boolean hasSuffix() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public String getUse() {
-		return "";
+		return getSuffix() + getName();
 	}
 
 	@Override
