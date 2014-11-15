@@ -29,7 +29,7 @@ public class CommandAutoResponses extends Command {
 				responses[1] = System.currentTimeMillis();
 			}
 		} else if(e.getMessage().contains(Bot.INSTANCE.getName())) {
-			String msg = e.getSender().equals("SandroHc") ? "Sandro-kun, ore no daisuki no otoko, nani? ♥" : "nani " + e.getSender() + "-kun?";
+			String msg = e.getSender().equalsIgnoreCase("SandroHc") ? "Sandro-kun, ore no daisuki no otoko, nani? :heart:" : "nani " + e.getSender() + "-kun?";
 			Bot.INSTANCE.sendMessage(e.getChannel(), msg);
 		}
 

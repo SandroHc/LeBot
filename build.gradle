@@ -36,6 +36,9 @@ jar {
 tasks.withType(JavaCompile) {
     options.compilerArgs += [ '-Xlint:all', '-Xlint:-path' ]
     options.deprecation = true
+}
+
+tasks.withType(Compile) {
     options.encoding = "UTF-8"
 }
 

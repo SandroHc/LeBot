@@ -27,7 +27,7 @@ public class CommandGoogle extends Command {
 			GoogleResults results = new Gson().fromJson(content, GoogleResults.class);
 
 			// Show title and URL of 1st result.
-			Bot.INSTANCE.sendMessage(e.getChannel(), URLDecoder.decode(results.getResponseData().getResults().get(0).getTitle().replaceAll("<b>([^<]*)</b>", EFFECT.BOLD.getChar() + "$1" + EFFECT.PLAIN.getChar()) + ' ' + TextEffectUtil.applyColor(results.getResponseData().getResults().get(0).getUrl(), COLOR.BLUE, COLOR.WHITE), "UTF-8"));
+			Bot.INSTANCE.sendMessage(e.getChannel(), URLDecoder.decode(results.getResponseData().getResults().get(0).getTitle().replaceAll("<b>([^<]*)</b>", EFFECT.BOLD.getChar() + "$1" + EFFECT.BOLD.getChar()) + ' ' + TextEffectUtil.applyColor(results.getResponseData().getResults().get(0).getUrl(), COLOR.BLUE, COLOR.WHITE), "UTF-8"));
 		} catch(UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}

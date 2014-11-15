@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public class Bot extends PircBot {
 	public static Bot INSTANCE;
-	private static String[] channels = { "#cjb" };
+	private static String[] channels = { "#geral" };
 
 	private boolean stopProcessingMessages = false;
 
@@ -19,9 +19,8 @@ public class Bot extends PircBot {
 
 		LogHandler.info("Iniciando bot...");
 
-		this.setName("Victorique-chan");
-		this.setAutoNickChange(true);
-		this.connect("irc.esper.net"); // Connect to the IRC server
+		this.setName("victorique-chan");
+		this.connect("estudantesdeprimidos.irc.slack.com", 6667, "estudantesdeprimidos.s7GCS8YdZRvMVYWRQCrv"); // Connect to the IRC server
 
 		// Join the channels specified
 		for(String channel : channels)
@@ -30,6 +29,8 @@ public class Bot extends PircBot {
 
 	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message) {
+		LogHandler.info("MSG on " + channel + " by [" + sender + "!" + login + "@" + hostname + "] " + message);
+
 		if(!stopProcessingMessages)
 			CommandHandler.INSTANCE.parse(channel, sender, message);
 	}
@@ -42,18 +43,20 @@ public class Bot extends PircBot {
 
 	@Override
 	protected void onJoin(String channel, String sender, String login, String hostname) {
-		if(sender.equals("SandroHc"))
+		if(sender.equalsIgnoreCase("SandroHc"))
 			sendMessage(channel, "Ohayo goshujin-sama!");
 	}
 
 	@Override
 	protected void onPrivateMessage(String sender, String login, String hostname, String message) {
+		LogHandler.info("PRVMSG [" + sender + "!" + login + "@" + hostname + "] " + message);
+
 		if(!stopProcessingMessages)
 			CommandHandler.INSTANCE.parse(sender, sender, message);
 
-		if(sender.equals("SandroHc")) {
+		if(sender.equalsIgnoreCase("SandroHc")) {
 			if(message.startsWith("\"")) {
-				sendMessage("#CJB", message.substring(1));
+				sendMessage("#geral", message.substring(1));
 			} else if(message.equals("stop")) {
 				stopProcessingMessages = !stopProcessingMessages;
 				sendMessage("SandroHc", stopProcessingMessages ? "Ok ok, goshujin-sama. :(" : "As you wish, watashi no goshujin-sama!");
@@ -72,6 +75,6 @@ public class Bot extends PircBot {
 	@Override
 	protected void onConnect() {
 		LogHandler.info("Conectado ao servidor.");
-		this.identify("biscoitos123");
+//		this.identify("biscoitos123");
 	}
 }

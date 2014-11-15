@@ -1,7 +1,7 @@
 package sandrohc.ircbot.utils;
 
 public class TextEffectUtil {
-	public static enum EFFECT { BOLD("\u0002"), ITALIC(""), UNDERLINE(""), PLAIN("\u000F"), COLOR("\u0003");
+	public static enum EFFECT { BOLD("*"), ITALIC("_"), COLOR("\u0003");
 		private String unicodeChar;
 
 		EFFECT(String unicodeChar) {
@@ -25,18 +25,14 @@ public class TextEffectUtil {
 	}
 
 	public static String applyEffect(String str, EFFECT effect) {
-		return applyEffect(str, effect, EFFECT.PLAIN);
-	}
-
-	public static String applyEffect(String str, EFFECT effect, EFFECT defaultEffect) {
-		return effect.getChar() + str + defaultEffect.getChar();
+		return effect.getChar() + str + effect.getChar();
 	}
 
 	public static String applyColor(String str, COLOR foreground, COLOR background) {
-		return EFFECT.COLOR.getChar() + foreground.getColor() + ',' + background.getColor() + str + EFFECT.PLAIN.getChar();
+		return EFFECT.COLOR.getChar() + foreground.getColor() + (background != COLOR.WHITE ? ',' + background.getColor() : "") + str;
 	}
 
 	public static String applyColor(String str, COLOR foreground, COLOR background, COLOR defaultForeground, COLOR defaultBackground) {
-		return EFFECT.COLOR.getChar() + foreground.getColor() + ',' + background.getColor() + str + EFFECT.COLOR.getChar() + defaultForeground.getColor() + ',' + defaultBackground.getColor();
+		return EFFECT.COLOR.getChar() + foreground.getColor() + (background != COLOR.WHITE ? ',' + background.getColor() : "") + str + EFFECT.COLOR.getChar() + defaultForeground.getColor() + (defaultBackground != COLOR.WHITE ? ',' + defaultBackground.getColor() : "");
 	}
 }
